@@ -1,0 +1,201 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" contentType="text/html"
+	renderKitId="PRIMEFACES_MOBILE">
+
+<style>
+.column1 {
+    width: 50%;
+    text-align: left;
+}
+
+.column2 {
+    width: 50%;
+    text-align: right;
+}
+</style>
+	<pm:page title="Mat-E-Mat">
+
+		<!-- Groups -->
+		<pm:view id="hackers" swatch="c">
+			<pm:header title="Wähle Hacker" />
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+				<h:form id="hackerForm">
+					<p:dataList value="#{consumerBean.hackers}" var="hacker">
+						<p:column>
+							<p:commandLink value="#{hacker.name}"
+								action="pm:drinks" update=":drinks">
+								<f:setPropertyActionListener value="#{hacker}"
+									target="#{consumerBean.h}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataList>
+				</h:form>
+				<p:separator  style="margin-bottom: 2em;margin-top:2em"/>
+				<h:form id="registrationForm">
+					<p:inputText id="name" label="Neuer Hacker" value="#{consumerBean.hnew}" />
+					<p:watermark for="name" value="Neuen Namen hier eintragen" />
+					<p:commandButton value="Anlegen"
+						 update=":drinks" action="pm:drinks" actionListener="#{consumerBean.register}"/>		
+				</h:form>
+			</pm:content>
+		</pm:view>
+
+		<!-- Drinks Page -->
+		<pm:view id="drinks" swatch="c">
+			<pm:header title="Getränkeliste">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#hackers?reverse=true" />
+				</f:facet>
+				<!-- 
+				<f:facet name="right">
+					<p:button value="Checkout" icon="forward" href="#checkout?reverse=true" />
+				</f:facet>				
+				 -->
+			</pm:header>
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+			
+				<p:commandButton value="Mein Account"
+					action="pm:account" update=":account"/>
+				<p:separator  style="margin-bottom: 2em;margin-top:2em"/>
+				<h:form id="drinksForm">
+					<p:dataList id="drinks"
+						value="#{consumerBean.drinks}" var="drink">
+						<p:column>
+							<p:commandLink value="#{drink.name} #{drink.bottleSize} l -- #{drink.filledCount}  Stück übrig"
+								action="pm:checkout" update=":checkout" rendered="#{drink.filledCount != 0}">
+								<f:setPropertyActionListener value="#{drink}"
+									target="#{consumerBean.drink}" />
+							</p:commandLink>
+                           	<p:commandLink value="#{drink.name} #{drink.bottleSize} l -- Leider leer. Nachzählen..."
+								action="pm:fillup" update=":fillup" rendered="#{drink.filledCount == 0}">
+								<f:setPropertyActionListener value="#{drink}"
+									target="#{consumerBean.drink}" />
+							</p:commandLink>
+
+
+						</p:column>
+					</p:dataList>
+				</h:form>
+
+			</pm:content>
+		</pm:view>
+
+		<!-- Account Page -->
+		<pm:view id="account" swatch="c">
+			<pm:header title="Mein Account - #{consumerBean.h.name}">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#drinks?reverse=true" />
+				</f:facet>
+			</pm:header>
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+				<p:outputPanel id="container">
+				<h4>
+					Dein Kontostand: #{consumerBean.h.amount}
+				</h4>
+				<p:separator />
+
+				<h:form id="payForm">
+					<p:inputText id="payment" value="#{consumerBean.payment}" />
+					<p:watermark for="payment" value="Betrag hier eintippen und in die Matekasse legen" />
+					<p:commandButton value="Einzahlen"
+						 update=":container" actionListener="#{consumerBean.pay}"/>					
+				</h:form>
+				                    </p:outputPanel>
+			</pm:content>
+		</pm:view>
+		
+		<!-- Details -->
+		<pm:view id="checkout" swatch="c">
+			<pm:header title="Deine Übersicht">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#drinks?reverse=true" />
+				</f:facet>
+			</pm:header>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+			<pm:content>
+				<h:panelGrid columns="2" style="padding-left:10%;padding-right:10%;align:center" >
+					<h:panelGroup >
+						<h:outputText id="old_amount" value="Alter Kontostand:"
+							escape="false" />
+					</h:panelGroup>
+					<h:panelGroup style="text-align:right;display:block">
+						<h:outputText id="old_amount_number"
+							value="#{consumerBean.h.amount}" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText id="cost" value="#{consumerBean.drink.name} kostet "
+							escape="false" />
+					</h:panelGroup>
+					<h:panelGroup style="text-align:right;display:block">
+						<h:outputText id="cost_number" value="#{consumerBean.drink.price}" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText id="new_amount" value="Neuer Kontostand: "
+							escape="false" />
+					</h:panelGroup>
+					<h:panelGroup style="text-align:right;display:block">
+						<h:outputText id="new_amount_number"
+							value="#{consumerBean.h.amount - consumerBean.drink.price}" style="font-weight:bold;
+							#{(consumerBean.h.amount - consumerBean.drink.price) > 0 ? 
+								'color:black' : 'color:red'}"/>
+					</h:panelGroup>
+
+
+				</h:panelGrid>
+				<p:outputPanel>
+
+					<br />
+
+					<br />
+
+					<p:commandButton value="Trinken!" icon="refresh"
+						action="#{consumerBean.drinkIt}" update=":account,:drinks,:fillup"/>
+				</p:outputPanel>
+			</pm:content>
+		</pm:view>
+		
+		
+		<!-- Fill up -->
+		<pm:view id="fillup" swatch="c">
+			<pm:header title="Bestand Auffüllen">
+				<f:facet name="left">
+					<p:button value="Getränke" icon="back" href="#drinks?reverse=true" />
+				</f:facet>
+			</pm:header>
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+				<h4>
+					Leider ist keine #{consumerBean.drink.name} mehr da!
+				</h4>
+					Falls dies nicht der analogen Realität entsprich, fülle bitte auf!
+				<h:form id="fillupForm">
+					<p:inputText id="count_full" label="Menge an Flaschen" value="#{consumerBean.fillup_full}" />
+					<p:watermark for="count_full" value="Wie viele volle Flaschen sind noch im Kühlschrank/in den Kästen?" />
+								
+					<p:inputText id="invoice" label="Entnahme aus Matekasse" value="#{consumerBean.invoice}" />
+					<p:watermark for="invoice" value="Wie viel Geld wurde aus der Matekasse dafür entnommen?" />
+					
+					<p:inputText id="count_empty" label="Leergut" value="#{consumerBean.fillup_empty}" />
+					<p:watermark for="count_empty" value="Wieviele leere Flaschen wurden abtransportiert?" />
+					
+					<p:commandButton value="Aufstocken"
+						 update=":drinks" action="pm:drinks" actionListener="#{consumerBean.fillup}"/>					
+				</h:form>
+			</pm:content>
+		</pm:view>
+
+	</pm:page>
+</f:view>
+
+

@@ -1,0 +1,118 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" contentType="text/html"
+	renderKitId="PRIMEFACES_MOBILE">
+
+	<pm:page title="Mat-E-Mat">
+
+		<!-- Groups -->
+		<pm:view id="start" swatch="c">
+			<pm:header title="Administration" />
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+				<p:commandButton value="Einkauf" action="pm:purchase"
+					update=":purchase" />
+				<p:separator style="margin-bottom: 2em;margin-top:2em" />
+
+<!-- 
+				<p:commandButton value="Statistik" action="pm:stats" update=":stats" />
+				<p:separator style="margin-bottom: 2em;margin-top:2em" />
+-->
+
+
+				<p:commandButton value="Korrektur" action="pm:correct"
+					update=":correct" />
+				<p:separator style="margin-bottom: 2em;margin-top:2em" />
+				<p:panel id="chart"/>
+				<!-- 
+				<p:lineChart id="chart" value="#{providerBean.chartModel}"
+					legendPosition="e" zoom="true" title="Kassenstand Übersicht"
+					style="width:100%;" widgetVar="chart" />
+-->
+			</pm:content>
+		</pm:view>
+
+		<!-- Purchasing Page -->
+		<pm:view id="purchase" swatch="c">
+			<pm:header title="Einkaufsverwaltung">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#start?reverse=true" />
+				</f:facet>
+			</pm:header>
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+		
+				<h:form id="drinksForm">
+					<p:dataList id="purchases" value="#{providerBean.purchases}"
+						var="purchase">
+
+						<p:column>
+							<h:panelGrid columns="3" style="text-align: center;width=100%">
+							
+								<h:panelGroup>
+									#{purchase.drink.name} -- #{purchase.drink.filledCount}
+								</h:panelGroup>
+								<h:panelGroup>
+									<p:inputText id="full_bottles" value="#{purchase.fullBottles}" />
+									<p:watermark for="full_bottles" value="Volle Flaschen"
+										style="float:left" />
+								</h:panelGroup>
+								<h:panelGroup>
+									<p:inputText id="empty_bottles"
+										value="#{purchase.emptyBottles}" />
+									<p:watermark for="empty_bottles" value="Leere Flaschen" />
+								</h:panelGroup>
+								
+							</h:panelGrid>
+						</p:column>
+					</p:dataList>
+					<p:separator style="margin-bottom: 2em;margin-top:2em" />
+					<p:inputText id="invoice" value="#{providerBean.invoice}" />
+					<p:watermark for="invoice" value="Rechnungsbetrag" />
+					<p:commandButton value="Absenden" update=":start" action="pm:start"
+						actionListener="#{providerBean.checkout}" />
+				</h:form>
+			</pm:content>
+		</pm:view>
+
+		<!-- Statistics Page -->
+		<pm:view id="stats" swatch="c">
+			<pm:header title="Kassenstatistik">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#start?reverse=true" />
+				</f:facet>
+			</pm:header>
+
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+
+			</pm:content>
+		</pm:view>
+		
+		<!-- Details -->
+		<pm:view id="correct" swatch="c">
+			<pm:header title="Kassenkorrektur">
+				<f:facet name="left">
+					<p:button value="Back" icon="back" href="#start?reverse=true" />
+				</f:facet>
+			</pm:header>
+			<pm:content>
+			    <p:messages showDetail="true" autoUpdate="true" closable="true" />  
+			<h4>Aktuell enthält die Kasse #{providerBean.kasse.amount}</h4>
+				<h:form id="correctForm">
+					<p:inputText id="amount" label="Neuer Kasseninhalt" value="#{providerBean.newAmount}" />
+					<p:watermark for="amount" value="Neuen Betrag hier eintragen" />
+					<p:commandButton value="Korrigieren"
+						update=":chart" action="pm:start" actionListener="#{providerBean.correct}"/>					
+				</h:form>
+			</pm:content>
+		</pm:view>
+
+	</pm:page>
+</f:view>
+
+
