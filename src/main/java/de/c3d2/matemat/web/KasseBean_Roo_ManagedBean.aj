@@ -5,12 +5,12 @@ package de.c3d2.matemat.web;
 
 import de.c3d2.matemat.domain.Kasse;
 import de.c3d2.matemat.web.KasseBean;
+import de.c3d2.matemat.web.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.DoubleRangeValidator;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
@@ -115,15 +116,16 @@ privileged aspect KasseBean_Roo_ManagedBean {
     
     public HtmlPanelGrid KasseBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText amountCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel amountCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        amountCreateOutput.setFor("amountCreateInput");
         amountCreateOutput.setId("amountCreateOutput");
-        amountCreateOutput.setValue("Amount: * ");
+        amountCreateOutput.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountCreateOutput);
         
         InputText amountCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -146,15 +148,16 @@ privileged aspect KasseBean_Roo_ManagedBean {
     
     public HtmlPanelGrid KasseBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText amountEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel amountEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        amountEditOutput.setFor("amountEditInput");
         amountEditOutput.setId("amountEditOutput");
-        amountEditOutput.setValue("Amount: * ");
+        amountEditOutput.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountEditOutput);
         
         InputText amountEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -177,7 +180,7 @@ privileged aspect KasseBean_Roo_ManagedBean {
     
     public HtmlPanelGrid KasseBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -185,7 +188,7 @@ privileged aspect KasseBean_Roo_ManagedBean {
         
         HtmlOutputText amountLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         amountLabel.setId("amountLabel");
-        amountLabel.setValue("Amount:   ");
+        amountLabel.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountLabel);
         
         HtmlOutputText amountValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -234,16 +237,16 @@ privileged aspect KasseBean_Roo_ManagedBean {
         String message = "";
         if (kasse.getId() != null) {
             kasse.merge();
-            message = "Successfully updated";
+            message = "message_successfully_updated";
         } else {
             kasse.persist();
-            message = "Successfully created";
+            message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialog.hide()");
-        context.execute("editDialog.hide()");
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = new FacesMessage(message);
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "Kasse");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllKasses();
@@ -251,7 +254,7 @@ privileged aspect KasseBean_Roo_ManagedBean {
     
     public String KasseBean.delete() {
         kasse.remove();
-        FacesMessage facesMessage = new FacesMessage("Successfully deleted");
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Kasse");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllKasses();

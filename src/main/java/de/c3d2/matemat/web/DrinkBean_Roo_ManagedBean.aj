@@ -5,12 +5,12 @@ package de.c3d2.matemat.web;
 
 import de.c3d2.matemat.domain.Drink;
 import de.c3d2.matemat.web.DrinkBean;
+import de.c3d2.matemat.web.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -19,6 +19,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -118,20 +119,22 @@ privileged aspect DrinkBean_Roo_ManagedBean {
     
     public HtmlPanelGrid DrinkBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
         nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name: * ");
+        nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
         InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
         nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{drinkBean.drink.name}", String.class));
+        nameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameCreateInput);
         
         Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -140,9 +143,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         nameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameCreateInputMessage);
         
-        HtmlOutputText priceCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel priceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceCreateOutput.setFor("priceCreateInput");
         priceCreateOutput.setId("priceCreateOutput");
-        priceCreateOutput.setValue("Price: * ");
+        priceCreateOutput.setValue("Price:");
         htmlPanelGrid.getChildren().add(priceCreateOutput);
         
         InputText priceCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -157,9 +161,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         priceCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(priceCreateInputMessage);
         
-        HtmlOutputText bottleSizeCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bottleSizeCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bottleSizeCreateOutput.setFor("bottleSizeCreateInput");
         bottleSizeCreateOutput.setId("bottleSizeCreateOutput");
-        bottleSizeCreateOutput.setValue("Bottle Size: * ");
+        bottleSizeCreateOutput.setValue("Bottle Size:");
         htmlPanelGrid.getChildren().add(bottleSizeCreateOutput);
         
         InputText bottleSizeCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -174,9 +179,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         bottleSizeCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(bottleSizeCreateInputMessage);
         
-        HtmlOutputText crateSizeCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel crateSizeCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        crateSizeCreateOutput.setFor("crateSizeCreateInput");
         crateSizeCreateOutput.setId("crateSizeCreateOutput");
-        crateSizeCreateOutput.setValue("Crate Size: * ");
+        crateSizeCreateOutput.setValue("Crate Size:");
         htmlPanelGrid.getChildren().add(crateSizeCreateOutput);
         
         Spinner crateSizeCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -197,20 +203,22 @@ privileged aspect DrinkBean_Roo_ManagedBean {
     
     public HtmlPanelGrid DrinkBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
         nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name: * ");
+        nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
         InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
         nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{drinkBean.drink.name}", String.class));
+        nameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameEditInput);
         
         Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -219,9 +227,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         nameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
-        HtmlOutputText priceEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel priceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        priceEditOutput.setFor("priceEditInput");
         priceEditOutput.setId("priceEditOutput");
-        priceEditOutput.setValue("Price: * ");
+        priceEditOutput.setValue("Price:");
         htmlPanelGrid.getChildren().add(priceEditOutput);
         
         InputText priceEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -236,9 +245,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         priceEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(priceEditInputMessage);
         
-        HtmlOutputText bottleSizeEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel bottleSizeEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        bottleSizeEditOutput.setFor("bottleSizeEditInput");
         bottleSizeEditOutput.setId("bottleSizeEditOutput");
-        bottleSizeEditOutput.setValue("Bottle Size: * ");
+        bottleSizeEditOutput.setValue("Bottle Size:");
         htmlPanelGrid.getChildren().add(bottleSizeEditOutput);
         
         InputText bottleSizeEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -253,9 +263,10 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         bottleSizeEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(bottleSizeEditInputMessage);
         
-        HtmlOutputText crateSizeEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel crateSizeEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        crateSizeEditOutput.setFor("crateSizeEditInput");
         crateSizeEditOutput.setId("crateSizeEditOutput");
-        crateSizeEditOutput.setValue("Crate Size: * ");
+        crateSizeEditOutput.setValue("Crate Size:");
         htmlPanelGrid.getChildren().add(crateSizeEditOutput);
         
         Spinner crateSizeEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
@@ -276,7 +287,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
     
     public HtmlPanelGrid DrinkBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -284,7 +295,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         
         HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:   ");
+        nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
         HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -294,7 +305,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         
         HtmlOutputText priceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         priceLabel.setId("priceLabel");
-        priceLabel.setValue("Price:   ");
+        priceLabel.setValue("Price:");
         htmlPanelGrid.getChildren().add(priceLabel);
         
         HtmlOutputText priceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -303,7 +314,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         
         HtmlOutputText bottleSizeLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         bottleSizeLabel.setId("bottleSizeLabel");
-        bottleSizeLabel.setValue("Bottle Size:   ");
+        bottleSizeLabel.setValue("Bottle Size:");
         htmlPanelGrid.getChildren().add(bottleSizeLabel);
         
         HtmlOutputText bottleSizeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -312,7 +323,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         
         HtmlOutputText crateSizeLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         crateSizeLabel.setId("crateSizeLabel");
-        crateSizeLabel.setValue("Crate Size:   ");
+        crateSizeLabel.setValue("Crate Size:");
         htmlPanelGrid.getChildren().add(crateSizeLabel);
         
         HtmlOutputText crateSizeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -361,16 +372,16 @@ privileged aspect DrinkBean_Roo_ManagedBean {
         String message = "";
         if (drink.getId() != null) {
             drink.merge();
-            message = "Successfully updated";
+            message = "message_successfully_updated";
         } else {
             drink.persist();
-            message = "Successfully created";
+            message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialog.hide()");
-        context.execute("editDialog.hide()");
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = new FacesMessage(message);
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "Drink");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllDrinks();
@@ -378,7 +389,7 @@ privileged aspect DrinkBean_Roo_ManagedBean {
     
     public String DrinkBean.delete() {
         drink.remove();
-        FacesMessage facesMessage = new FacesMessage("Successfully deleted");
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Drink");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllDrinks();

@@ -6,7 +6,10 @@ package de.c3d2.matemat.domain;
 import de.c3d2.matemat.domain.Hacker;
 import de.c3d2.matemat.domain.HackerDataOnDemand;
 import de.c3d2.matemat.domain.HackerIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect HackerIntegrationTest_Roo_IntegrationTest {
     
     declare @type: HackerIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: HackerIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: HackerIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: HackerIntegrationTest: @Transactional;
     
     @Autowired
-    private HackerDataOnDemand HackerIntegrationTest.dod;
+    HackerDataOnDemand HackerIntegrationTest.dod;
     
     @Test
     public void HackerIntegrationTest.testCountHackers() {
@@ -101,7 +104,16 @@ privileged aspect HackerIntegrationTest_Roo_IntegrationTest {
         Hacker obj = dod.getNewTransientHacker(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Hacker' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Hacker' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'Hacker' identifier to no longer be null", obj.getId());
     }

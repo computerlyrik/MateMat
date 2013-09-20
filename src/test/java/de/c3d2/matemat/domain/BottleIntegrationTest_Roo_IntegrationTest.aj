@@ -6,7 +6,10 @@ package de.c3d2.matemat.domain;
 import de.c3d2.matemat.domain.Bottle;
 import de.c3d2.matemat.domain.BottleDataOnDemand;
 import de.c3d2.matemat.domain.BottleIntegrationTest;
+import java.util.Iterator;
 import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +22,12 @@ privileged aspect BottleIntegrationTest_Roo_IntegrationTest {
     
     declare @type: BottleIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: BottleIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
+    declare @type: BottleIntegrationTest: @ContextConfiguration(locations = "classpath*:/META-INF/spring/applicationContext*.xml");
     
     declare @type: BottleIntegrationTest: @Transactional;
     
     @Autowired
-    private BottleDataOnDemand BottleIntegrationTest.dod;
+    BottleDataOnDemand BottleIntegrationTest.dod;
     
     @Test
     public void BottleIntegrationTest.testCountBottles() {
@@ -101,7 +104,16 @@ privileged aspect BottleIntegrationTest_Roo_IntegrationTest {
         Bottle obj = dod.getNewTransientBottle(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Bottle' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Bottle' identifier to be null", obj.getId());
-        obj.persist();
+        try {
+            obj.persist();
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
         obj.flush();
         Assert.assertNotNull("Expected 'Bottle' identifier to no longer be null", obj.getId());
     }

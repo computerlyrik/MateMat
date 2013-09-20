@@ -5,13 +5,13 @@ package de.c3d2.matemat.web;
 
 import de.c3d2.matemat.domain.Hacker;
 import de.c3d2.matemat.web.HackerBean;
+import de.c3d2.matemat.web.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -24,6 +24,7 @@ import javax.faces.validator.LengthValidator;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
@@ -122,20 +123,22 @@ privileged aspect HackerBean_Roo_ManagedBean {
     
     public HtmlPanelGrid HackerBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
         nameCreateOutput.setId("nameCreateOutput");
-        nameCreateOutput.setValue("Name: * ");
+        nameCreateOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameCreateOutput);
         
         InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nameCreateInput.setId("nameCreateInput");
         nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{hackerBean.hacker.name}", String.class));
+        nameCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameCreateInput);
         
         Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -144,9 +147,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         nameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameCreateInputMessage);
         
-        HtmlOutputText amountCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel amountCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        amountCreateOutput.setFor("amountCreateInput");
         amountCreateOutput.setId("amountCreateOutput");
-        amountCreateOutput.setValue("Amount: * ");
+        amountCreateOutput.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountCreateOutput);
         
         InputText amountCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -164,9 +168,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         amountCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(amountCreateInputMessage);
         
-        HtmlOutputText pinCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel pinCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        pinCreateOutput.setFor("pinCreateInput");
         pinCreateOutput.setId("pinCreateOutput");
-        pinCreateOutput.setValue("Pin: * ");
+        pinCreateOutput.setValue("Pin:");
         htmlPanelGrid.getChildren().add(pinCreateOutput);
         
         InputText pinCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -185,9 +190,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         pinCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pinCreateInputMessage);
         
-        HtmlOutputText lastDrinkCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel lastDrinkCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        lastDrinkCreateOutput.setFor("lastDrinkCreateInput");
         lastDrinkCreateOutput.setId("lastDrinkCreateOutput");
-        lastDrinkCreateOutput.setValue("Last Drink:   ");
+        lastDrinkCreateOutput.setValue("Last Drink:");
         htmlPanelGrid.getChildren().add(lastDrinkCreateOutput);
         
         Calendar lastDrinkCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -210,20 +216,22 @@ privileged aspect HackerBean_Roo_ManagedBean {
     
     public HtmlPanelGrid HackerBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
         
-        HtmlOutputText nameEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
         nameEditOutput.setId("nameEditOutput");
-        nameEditOutput.setValue("Name: * ");
+        nameEditOutput.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameEditOutput);
         
         InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nameEditInput.setId("nameEditInput");
         nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{hackerBean.hacker.name}", String.class));
+        nameEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(nameEditInput);
         
         Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -232,9 +240,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         nameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
-        HtmlOutputText amountEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel amountEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        amountEditOutput.setFor("amountEditInput");
         amountEditOutput.setId("amountEditOutput");
-        amountEditOutput.setValue("Amount: * ");
+        amountEditOutput.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountEditOutput);
         
         InputText amountEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -252,9 +261,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         amountEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(amountEditInputMessage);
         
-        HtmlOutputText pinEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel pinEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        pinEditOutput.setFor("pinEditInput");
         pinEditOutput.setId("pinEditOutput");
-        pinEditOutput.setValue("Pin: * ");
+        pinEditOutput.setValue("Pin:");
         htmlPanelGrid.getChildren().add(pinEditOutput);
         
         InputText pinEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
@@ -273,9 +283,10 @@ privileged aspect HackerBean_Roo_ManagedBean {
         pinEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(pinEditInputMessage);
         
-        HtmlOutputText lastDrinkEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel lastDrinkEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        lastDrinkEditOutput.setFor("lastDrinkEditInput");
         lastDrinkEditOutput.setId("lastDrinkEditOutput");
-        lastDrinkEditOutput.setValue("Last Drink:   ");
+        lastDrinkEditOutput.setValue("Last Drink:");
         htmlPanelGrid.getChildren().add(lastDrinkEditOutput);
         
         Calendar lastDrinkEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
@@ -298,7 +309,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
     
     public HtmlPanelGrid HackerBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -306,7 +317,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
         
         HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nameLabel.setId("nameLabel");
-        nameLabel.setValue("Name:   ");
+        nameLabel.setValue("Name:");
         htmlPanelGrid.getChildren().add(nameLabel);
         
         HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -316,7 +327,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
         
         HtmlOutputText amountLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         amountLabel.setId("amountLabel");
-        amountLabel.setValue("Amount:   ");
+        amountLabel.setValue("Amount:");
         htmlPanelGrid.getChildren().add(amountLabel);
         
         HtmlOutputText amountValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -325,7 +336,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
         
         HtmlOutputText pinLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         pinLabel.setId("pinLabel");
-        pinLabel.setValue("Pin:   ");
+        pinLabel.setValue("Pin:");
         htmlPanelGrid.getChildren().add(pinLabel);
         
         HtmlOutputText pinValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -335,7 +346,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
         
         HtmlOutputText lastDrinkLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         lastDrinkLabel.setId("lastDrinkLabel");
-        lastDrinkLabel.setValue("Last Drink:   ");
+        lastDrinkLabel.setValue("Last Drink:");
         htmlPanelGrid.getChildren().add(lastDrinkLabel);
         
         HtmlOutputText lastDrinkValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -387,16 +398,16 @@ privileged aspect HackerBean_Roo_ManagedBean {
         String message = "";
         if (hacker.getId() != null) {
             hacker.merge();
-            message = "Successfully updated";
+            message = "message_successfully_updated";
         } else {
             hacker.persist();
-            message = "Successfully created";
+            message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialog.hide()");
-        context.execute("editDialog.hide()");
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = new FacesMessage(message);
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "Hacker");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllHackers();
@@ -404,7 +415,7 @@ privileged aspect HackerBean_Roo_ManagedBean {
     
     public String HackerBean.delete() {
         hacker.remove();
-        FacesMessage facesMessage = new FacesMessage("Successfully deleted");
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Hacker");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
         return findAllHackers();
