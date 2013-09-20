@@ -17,7 +17,8 @@ import de.c3d2.matemat.exception.NoBottleException;
 import de.c3d2.matemat.web.Logger;
 
 @RooJavaBean
-@RooToString(excludeFields={"bottles"})
+//@RooToString(excludeFields={"bottles"})
+@RooToString
 @RooJpaActiveRecord
 public class Drink {
 
